@@ -1,0 +1,42 @@
+Act as an expert Systems Programmer. I am a user named "VibeOS" running Arch Linux.
+
+I need you to write a complete, working MBR (Master Boot Record) Operating System named "VibeOS".
+The code must compile and run on the first try.
+
+STRICT REQUIREMENTS:
+
+1. Project Structure:
+   The script must assume or create the following structure:
+   - `VibeOS/src/` : Contains `boot.asm`, `kernel.cpp`, and `linker.ld`.
+   - `VibeOS/build/`: Where object files will be stored.
+   - `VibeOS/bin/` : Where the final bootable image will be saved.
+
+2. Dependencies & Build System:
+   - Provide a single bash script `build_and_run.sh` located in the root `VibeOS/` folder.
+   - The script must check for and install missing Arch Linux packages using `sudo pacman -S --needed`.
+   - Required packages: `base-devel`, `nasm`, `qemu-system-x86`.
+   - Use `gcc` with flags `-m32 -ffreestanding -fno-rtti -fno-exceptions` to compile C++.
+   - Use `ld` with `-m elf_i386` to link.
+
+3. Bootloader (`src/boot.asm`):
+   - Written in NASM Assembly.
+   - Must be fit in the first 512 bytes (MBR) but MUST load the C++ kernel from the disk (next sectors) into memory before jumping to it.
+   - Switch CPU from Real Mode (16-bit) to Protected Mode (32-bit).
+   - Initialize the stack and call `kernel_main`.
+
+4. Kernel Logic (`src/kernel.cpp`):
+   - Written in C++.
+   - Direct VGA memory access at `0xB8000` for text output.
+   - A Keyboard driver that reads scancodes from port `0x60` and converts them to ASCII (support basic letters, numbers, and Enter).
+   - **Shell Loop:**
+     - Display a prompt `VibeOS> `.
+     - Wait for user input.
+     - Support the command `echo [text]` which prints the text back.
+     - Support `clear` to clear the screen.
+     - Handle `Backspace` visually.
+
+5. Execution:
+   - The script must concatenate the bootloader binary and the kernel binary into a single file `vibeos.bin`.
+   - Automatically launch `qemu-system-i386 -hda bin/vibeos.bin`.
+
+Make sure the bash script creates the necessary directories (`src`, `build`, `bin`) before compiling.

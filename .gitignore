@@ -1,0 +1,5 @@
+build/
+dist/
+*.img
+*.obj
+*.efi
