@@ -50,9 +50,9 @@ To build and run this project, you need a Linux environment with the following t
 ```bash
 chmod +x build_and_run.sh
 ./build_and_run.sh
+```
 
 This script will compile the kernel, generate a bootable UEFI disk image, and launch QEMU.
-```
 
 ## Disclaimer of Warranty
 
